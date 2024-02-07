@@ -1,0 +1,3 @@
+git remote add origin https://github.com/Dipeshkhadgi/DSA-Coursework-QA-file.git
+git branch -M main
+git push -u origin main

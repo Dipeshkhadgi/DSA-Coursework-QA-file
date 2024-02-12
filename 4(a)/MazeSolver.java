@@ -96,19 +96,12 @@ public class MazeSolver {
 }
 
 /*
+Output: 8
+ // Answer Summary:
+// The provided solution defines a MazeGame class with a method findMinimumMovesToCollectAllKeys to solve the maze problem. 
+It utilizes a breadth-first search (BFS) algorithm to explore the maze and determine the minimum number of moves required. 
+The maze is represented as a 2D grid of characters. 
+The algorithm tracks the collected keys using a bitmask and utilizes a queue to perform BFS traversal. 
+Finally, the method returns the minimum number of moves needed to collect all keys and reach the exit, or -1 if it's not possible
 
-// Output: 8
-
-
- Explanation:
-
-We first locate the starting position and determine the target keys to collect by iterating through the maze.
-
-We use BFS to explore the maze. At each step, we consider all possible moves from the current position and enqueue the new states (positions) if they are valid and not visited before.
-
-We keep track of the collected keys using a bit mask, where each bit represents whether a key has been collected or not.
-
-The BFS continues until we collect all target keys or until there are no more reachable positions.
-
-We return the minimum number of steps required to collect all keys, or -1 if it's impossible to collect all keys and reach the exit.
  */

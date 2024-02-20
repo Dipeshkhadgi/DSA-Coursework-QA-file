@@ -1,0 +1,12 @@
+Post ID: 1
+Author: dipesh
+Genre: Fiction
+Content: this is a test
+Likes: 1
+
+Post ID: 2
+Author: dipesh
+Genre: Fiction
+Content: test
+Likes: 0
+

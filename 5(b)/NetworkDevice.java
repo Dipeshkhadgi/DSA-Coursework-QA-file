@@ -1,47 +1,59 @@
 import java.util.*;
 
 public class NetworkDevice {
-    public static List<Integer> findImpactedDevices(int[][] edges, int targetDevice) {
-        Map<Integer, List<Integer>> graph = buildGraph(edges);
-        Set<Integer> visited = new HashSet<>();
-        List<Integer> impactedDevices = new ArrayList<>();
 
-        dfs(graph, targetDevice, visited, impactedDevices);
-        impactedDevices.remove((Integer) targetDevice);
+    public static List<Integer> findUniqueParentNodes(int[][] edges, int target) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        Map<Integer, Integer> inDegree = new HashMap<>();
 
-        return impactedDevices;
+        // Construct the graph and calculate in-degrees
+        for (int[] edge : edges) {
+            int from = edge[0];
+            int to = edge[1];
+            graph.putIfAbsent(from, new ArrayList<>());
+            graph.get(from).add(to);
+            inDegree.put(to, inDegree.getOrDefault(to, 0) + 1);
+        }
+
+        List<Integer> result = new ArrayList<>();
+        exploreGraph(graph, inDegree, target, target, result);
+
+        return result;
     }
 
-    private static void dfs(Map<Integer, List<Integer>> graph, int device, Set<Integer> visited, List<Integer> impactedDevices) {
-        visited.add(device);
-        impactedDevices.add(device);
-        List<Integer> connectedDevices = graph.getOrDefault(device, new ArrayList<>());
+    // Explore the graph using Depth-first search to find nodes with only the target as parent
+    private static void exploreGraph(Map<Integer, List<Integer>> graph, Map<Integer, Integer> inDegree, int node,
+            int target, List<Integer> result) {
 
-        for (int connectedDevice : connectedDevices) {
-            if (!visited.contains(connectedDevice)) {
-                dfs(graph, connectedDevice, visited, impactedDevices);
+        // If the node has only one incoming edge and it's not the target node itself, add it to the result
+        if (inDegree.getOrDefault(node, 0) == 1 && node != target) {
+            result.add(node);
+        }
+
+        // Traverse children recursively
+        if (graph.containsKey(node)) {
+            for (int child : graph.get(node)) {
+                exploreGraph(graph, inDegree, child, target, result);
             }
         }
     }
 
-    private static Map<Integer, List<Integer>> buildGraph(int[][] edges) {
-        Map<Integer, List<Integer>> graph = new HashMap<>();
-
-        for (int[] edge : edges) {
-            int u = edge[0];
-            int v = edge[1];
-            graph.putIfAbsent(u, new ArrayList<>());
-            graph.putIfAbsent(v, new ArrayList<>());
-            graph.get(u).add(v);
-        }
-
-        return graph;
-    }
-
     public static void main(String[] args) {
-        int[][] edges = {{0,1},{0,2},{1,3},{1,6},{2,4},{4,6},{4,5},{5,7}};
-        int targetDevice = 4;
-        List<Integer> impactedDevices = findImpactedDevices(edges, targetDevice);
-        System.out.println("Impacted Device List: " + impactedDevices);
+        // Sample input
+        int[][] edges = { { 0, 1 }, { 0, 2 }, { 1, 3 }, { 1, 6 }, { 2, 4 }, { 4, 6 }, { 4, 5 }, { 5, 7 } };
+        int target = 4;
+
+        // Find nodes whose only parent is the target
+        List<Integer> uniqueParentNodes = findUniqueParentNodes(edges, target);
+
+        // Print the result
+        System.out.print("If targeted device is " + target + " then impacted Device List is: {");
+        for (int i = 0; i < uniqueParentNodes.size(); i++) {
+            System.out.print(uniqueParentNodes.get(i));
+            if (i < uniqueParentNodes.size() - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("}");
     }
 }
